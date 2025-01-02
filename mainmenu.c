@@ -102,6 +102,8 @@ void ProcGameMainMenu(void) {
 //l_textstring=sprintf(s_textstring,"CAANOO version  26-nov-2010");
 #if defined(GCW)
 	l_textstring = sprintf(s_textstring, "GCW Zero version "__BUILDDATE);
+#elif defined(DREAMCAST)
+	l_textstring = sprintf(s_textstring, "Dreamcast version "__BUILDDATE);
 #else
 	l_textstring = sprintf(s_textstring, "Linux version    "__BUILDDATE);
 #endif

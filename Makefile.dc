@@ -1,0 +1,57 @@
+#DEBUG=1
+
+EXE = worship.elf
+
+CFLAGS = -O2 -fomit-frame-pointer -ffunction-sections -ffast-math -fsingle-precision-constant -DDREAMCAST
+CFLAGS += -D__BUILDDATE=\"$(shell date +%d-%b-%Y)\"
+CPPFLAGS = -I$(KOS_PORTS)/include/SDL
+
+ifdef DEBUG
+ CFLAGS += -g
+endif
+
+LDLIBS = -lSDL_mixer -lSDL
+
+HOST=kos-
+
+CC = $(HOST)cc
+STRIP = $(HOST)strip
+
+SRC = 	gameframe.c \
+	gamestate.c \
+	initgame.c \
+	mapdata.c \
+	playeriteraction.c \
+	renderobjects.c \
+	vars.c \
+	gamegui.c \
+	gamestep.c \
+	main.c \
+	mobs.c \
+	postrender.c \
+	sblit.c \
+	vlines.c \
+	zmath.c \
+	gameloop.c \
+	gpu3d.c \
+	mainmenu.c \
+	palette.c \
+	rendermap.c \
+	ssystem.c \
+	waveai.c
+CFLAGS += $(DEFS)
+
+OBJS = $(SRC:.c=.o)
+
+all : $(SRC) $(EXE)
+
+$(EXE): $(OBJS)
+	$(CC) $(CFLAGS) $^ $(LDFLAGS) $(LDLIBS) -o $@
+ifndef DEBUG
+	$(STRIP) $(EXE)
+endif
+
+clean:
+	rm -rf $(OBJS) $(EXE)
+	
+redist: all

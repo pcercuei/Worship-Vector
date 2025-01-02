@@ -82,7 +82,7 @@ void InitGameCore(void) {
 	screen = SDL_SetVideoMode (320, 240, 8, SDL_HWSURFACE | SDL_DOUBLEBUF);
 #endif
 
-#if defined(WIN32) || defined(GCW) || defined(LINUX)
+#if defined(WIN32) || defined(GCW) || defined(LINUX) || defined(DREAMCAST)
 	SDL_ShowCursor(SDL_DISABLE);
 	screen = SDL_SetVideoMode (320, 240, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
 	//screen = SDL_SetVideoMode (640 ,480, 32, SDL_HWSURFACE | SDL_FULLSCREEN);
@@ -113,7 +113,12 @@ void InitGameCore(void) {
 #endif
 }
 
+#ifdef DREAMCAST
+#define AXIS_DEADZONE 64
+static const Sint8 hat_to_dpad[16] = { -1, 0, 2, 1, 4, -1, 3, -1, 6, 7, -1, -1, 5, -1, -1, -1 };
+#else
 #define AXIS_DEADZONE 7000
+#endif
 static const Sint8 angle_detection[9] = { 7, 0, 1, 6, -1, 2, 5, 4, 3 };
 int i_keyb[23];
 static const SDLKey sd_keyb[23] = { SDLK_KP8, SDLK_KP9, SDLK_KP6, SDLK_KP3,
@@ -191,12 +196,17 @@ void CoreProcInput(void) {
 	button[1] = SDL_JoystickGetButton(joy, 1);
 	button[2] = SDL_JoystickGetButton(joy, 2);
 	button[3] = SDL_JoystickGetButton(joy, 3);
+#ifdef DREAMCAST
+	button[4] = SDL_JoystickGetAxis(joy, 3) > 128;
+	button[5] = SDL_JoystickGetAxis(joy, 2) > 128;
+#else
 	button[4] = SDL_JoystickGetButton(joy, 4);
 	button[5] = SDL_JoystickGetButton(joy, 5);
 	//button[6]=SDL_JoystickGetButton(joy,VK_VOL_DOWN);
 	//button[7]=SDL_JoystickGetButton(joy,VK_VOL_UP);
 	button[8] = SDL_JoystickGetButton(joy, 6);
 	//button[9]=SDL_JoystickGetButton(joy,VK_SELECT);
+#endif
 
 	dpad = -1;
 	Sint16 axis = SDL_JoystickGetAxis(joy, 0);
@@ -214,6 +224,10 @@ void CoreProcInput(void) {
 		y = 2;
 
 	dpad = angle_detection[x + y * 3];
+#ifdef DREAMCAST
+	if (dpad == -1)
+		dpad = hat_to_dpad[SDL_JoystickGetHat(joy, 0)];
+#endif
 
 #if defined(WIN32) || defined(GCW) || defined(LINUX)
 	//Keyboard
@@ -343,7 +357,7 @@ void CoreProcInput(void) {
 
 }
 
-#if defined(WIN32) || defined(GCW) || defined(LINUX)
+#if defined(WIN32) || defined(GCW) || defined(LINUX) || defined(DREAMCAST)
 U32 scrbuf2[1228800/4];
 #endif
 
@@ -359,7 +373,7 @@ void GameCoreTick(void) {
 	memcpy(screen->pixels,scrbuf,76800);
 #endif
 
-#if defined(WIN32) || defined(GCW) || defined(LINUX)
+#if defined(WIN32) || defined(GCW) || defined(LINUX) || defined(DREAMCAST)
 #if 0
 	U32 x,y,i,ii,col;
 	U8 c,r,b,g;
@@ -385,7 +399,7 @@ void GameCoreTick(void) {
 
 	int i, j;
 	Uint32 *dest = screen->pixels;
-	Uint8  *src  = &scrbuf;
+	Uint8  *src  = (Uint8 *)&scrbuf;
 	int t;
 	for (j=0; j<240; j++)
 		for (i=0; i<320; i++)
