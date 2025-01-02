@@ -17,6 +17,7 @@
 
 #include "vlines.h"
 #include "waveai.h"
+#include "ssystem.h"
 
 Uint16 tower_cost[6] = { 20, 30, 40, 50, 250, 50 };
 

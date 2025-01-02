@@ -13,8 +13,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "mapdata.h"
 #include "vars.h"
 #include "sblit.h"
+#include "ssystem.h"
 
 char tower_name[6][32] = { "MINIGUN", "ANTIAIR", "ARTILER", "SLOWRAY",
 		"SNIPER ", "PLANT  "

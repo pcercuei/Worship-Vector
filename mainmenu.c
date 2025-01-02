@@ -15,7 +15,8 @@
 
 #include "vars.h"
 #include "sblit.h"
-//#include "ssystem.h"
+#include "ssystem.h"
+#include "mapdata.h"
 
 char mmtt[6][32] = {
 		"BEGIN NEW GAME  ",

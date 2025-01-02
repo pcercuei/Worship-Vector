@@ -16,6 +16,8 @@
 #include "vars.h"
 #include "rendermap.h"
 #include "renderobjects.h"
+#include "playeriteraction.h"
+#include "gamegui.h"
 
 void GameStep(void) {
 	PlayerIteraction();

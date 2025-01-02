@@ -15,6 +15,9 @@
 
 #include "vars.h"
 #include "mobs.h"
+#include "ssystem.h"
+#include "vlines.h"
+#include "zmath.h"
 
 void NewWave(void) {
 	PlaySound(3, 0);

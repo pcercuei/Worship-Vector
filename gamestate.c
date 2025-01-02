@@ -19,6 +19,7 @@
 #include "gamestep.h"
 
 #include "mainmenu.h"
+#include "sblit.h"
 
 void ProcGameState(void) {
 

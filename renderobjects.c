@@ -15,6 +15,8 @@
 
 #include "vars.h"
 #include "mobs.h"
+#include "gpu3d.h"
+#include "sblit.h"
 
 void RenderCursor(void) {
 	Sint32 x = cursorx / 65536;

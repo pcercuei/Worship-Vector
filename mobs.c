@@ -15,6 +15,8 @@
 
 #include "vars.h"
 #include "gpu3d.h"
+#include "sblit.h"
+#include "zmath.h"
 
 void SpawnMob(void) {
 
