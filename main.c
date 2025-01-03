@@ -19,6 +19,10 @@
 #include "initgame.h"
 
 int main(int argc, char *argv[]) {
+#ifdef DREAMCAST
+	chdir("/cd/worship");
+#endif
+
 	InitGameCore();
 	InitGame();
 

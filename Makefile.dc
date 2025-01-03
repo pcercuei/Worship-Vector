@@ -1,7 +1,5 @@
 #DEBUG=1
 
-EXE = worship.elf
-
 CFLAGS = -O2 -fomit-frame-pointer -ffunction-sections -ffast-math -fsingle-precision-constant -DDREAMCAST
 CFLAGS += -D__BUILDDATE=\"$(shell date +%d-%b-%Y)\"
 CPPFLAGS = -I$(KOS_PORTS)/include/SDL
@@ -10,7 +8,7 @@ ifdef DEBUG
  CFLAGS += -g
 endif
 
-LDLIBS = -lSDL_mixer -lSDL
+LDLIBS = -lSDL_mixer -lSDL -lvorbisfile -lvorbis -logg -lkosfat
 
 HOST=kos-
 
@@ -43,15 +41,32 @@ CFLAGS += $(DEFS)
 
 OBJS = $(SRC:.c=.o)
 
-all : $(SRC) $(EXE)
+DATAFILES := Beep.wav \
+	     Click.wav \
+	     DataSmasher.ogg \
+	     Defense.ogg \
+	     MainControl.ogg \
+	     Order.wav \
+	     Victory.wav \
+	     title.png \
+	     wvector.png
 
-$(EXE): $(OBJS)
+all: worship.cdi
+
+%.elf: $(OBJS)
 	$(CC) $(CFLAGS) $^ $(LDFLAGS) $(LDLIBS) -o $@
-ifndef DEBUG
-	$(STRIP) $(EXE)
-endif
+	$(STRIP) $@
+
+iso/worship:
+	mkdir -p iso/worship
+
+iso/worship/%: redist/% iso/worship
+	cp $< $@
+
+%.cdi: %.elf $(addprefix iso/worship/,$(DATAFILES))
+	mkdcdisc -e $< -o $@ -d iso/ -N -n "Worship Vector" -a "Quasist"
 
 clean:
-	rm -rf $(OBJS) $(EXE)
+	rm -rf $(OBJS) worship.cdi iso
 	
 redist: all
